@@ -49,7 +49,7 @@ app.post('/api/analyze', async (req, res) => {
       body: JSON.stringify({
         model: 'gpt-4o',
         messages,
-        max_tokens: 8000,
+        max_tokens: 16000,
         temperature: 0.3,
         response_format: { type: 'json_object' }
       }),
