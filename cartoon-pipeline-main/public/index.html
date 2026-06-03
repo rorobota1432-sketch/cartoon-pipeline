@@ -283,7 +283,7 @@ function copyPrompt(btn, id) {
 
 async function analyze() {
   const script = document.getElementById('scriptInput').value.trim();
-  const style = document.getElementById('projectStyle').value.trim() || 'cinematic animation';
+  const style = document.getElementById('projectStyle').value.trim() || 'cinematic photorealistic animation';
   if (!script) return;
 
   document.getElementById('errorBox').className = 'error-box';
@@ -293,21 +293,52 @@ async function analyze() {
   setProgress(10, 'Підготовка запиту...');
 
   const charsWithName = chars.filter(c => c.name);
-
-  // Будуємо список персонажів з їх візуальними описами для системного промпту
-  // БЕЗ зображень в тексті — зображення йдуть окремо
-  const charList = charsWithName.length > 0
-    ? '\n\nCHARACTERS:\n' + charsWithName.map(c => `- "${c.name}"${c.imageB64 ? ' [has reference image]' : ''}`).join('\n')
+  const charDescSection = charsWithName.length > 0
+    ? '\n\nCHARACTER REFERENCES:\n' + charsWithName.map(c => `- Role: "${c.name}" ${c.imageB64 ? '(image attached)' : ''}`).join('\n')
     : '';
 
-  const systemPrompt = `You are a JSON API. Return ONLY valid JSON, no markdown, no extra text.
-Process EVERY scene in the screenplay.
-Style: "${style}"${charList}
+  const systemPrompt = `You are a JSON API. You must respond with ONLY a valid JSON object. No explanations, no apologies, no markdown, no backticks, no text before or after the JSON. Never write "I'm sorry" or any other text — only JSON.
 
-RULE FOR image_prompt: NEVER write character role names (e.g. "Girl2", "Man", "Hero"). Instead describe ONLY physical appearance: hair color/length/style, eye color, skin tone, clothing, body position, expression. Use reference images if provided.
+CRITICAL: You MUST process EVERY scene in the screenplay. If there are 24 scenes, output all 24. Do not stop early. Do not summarize. Every [Кадр N] or [Frame N] must become a separate scene object in the array.
 
-JSON structure:
-{"characters":[{"role":"","alias":"","visual":"hair, eyes, skin, clothing description"}],"scenes":[{"number":1,"location":"","time":"","characters_present":["alias"],"action":"","dialogue":"","should_split":false,"split_reason":"","image_prompt":"physical appearance description only, no role names. Shot type, location, lighting, characters by appearance, background. English, 2-4 sentences. Style: ${style}.","video_prompt":"original scene text + emotional descriptions in parentheses","duration_seconds":10}],"total_scenes":0,"split_count":0}`;
+Animation project style: "${style}"${charDescSection}
+
+CRITICAL RULES FOR image_prompt:
+- NEVER use character role names (like "Girl2", "Friend2", "Man", "Woman") anywhere in image_prompt
+- ALWAYS describe characters by physical appearance ONLY: exact hair color, hair length and style, eye color, skin tone, body type, clothing details
+- Example WRONG: "Girl2 is standing near the window"
+- Example CORRECT: "A young woman with long blonde straight hair, blue eyes, wearing a green bomber jacket and dark jeans, is standing near the window"
+- If a reference image is attached, analyze it carefully and use those visual details
+
+Return this exact JSON structure:
+{
+  "characters": [
+    {"role": "role name", "alias": "short English alias", "visual": "detailed visual description: hair color/length/style, eye color, skin tone, age appearance, body type, typical clothing"}
+  ],
+  "scenes": [
+    {
+      "number": 1,
+      "location": "location in Ukrainian",
+      "time": "time of day in Ukrainian",
+      "characters_present": ["alias1"],
+      "action": "brief action description in Ukrainian",
+      "dialogue": "all dialogue lines verbatim from this scene",
+      "should_split": false,
+      "split_reason": "",
+      "image_prompt": "NO ROLE NAMES ALLOWED. Describe: 1) Shot type 2) Location with lighting 3) Each character by physical appearance only (hair color/style, eyes, skin, clothing, body position, facial expression) 4) Background details. English, 3-5 sentences. Style: ${style}.",
+      "video_prompt": "Take the original scene text exactly as written and add emotional descriptions in parentheses for each character. Keep original Ukrainian/English text unchanged. Do not rewrite or summarize.",
+      "duration_seconds": 10
+    }
+  ],
+  "total_scenes": 0,
+  "split_count": 0
+}
+
+Rules:
+- PROCESS ALL SCENES — never skip any
+- should_split = true if scene has very distinct location changes
+- In image_prompt: describe characters by appearance only, NEVER by role name
+- Return ONLY the JSON, nothing else`;
 
   setProgress(30, 'Надсилаємо до GPT-4o...');
 
@@ -319,7 +350,7 @@ JSON structure:
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         systemPrompt,
-        userText: 'SCREENPLAY:\n' + script + (images.length ? '\n\nAnalyze attached character images and use their physical appearance in image_prompt fields.' : ''),
+        userText: 'SCREENPLAY:\n' + script + (images.length ? '\n\nCharacter reference images attached. Use their physical appearance in ALL image_prompt fields. Never use role names.' : ''),
         images
       })
     });
