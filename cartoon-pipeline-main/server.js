@@ -36,6 +36,10 @@ app.post('/api/analyze', async (req, res) => {
   ];
 
   try {
+    // AbortController для timeout 120 секунд
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 120000);
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -48,8 +52,11 @@ app.post('/api/analyze', async (req, res) => {
         max_tokens: 8000,
         temperature: 0.3,
         response_format: { type: 'json_object' }
-      })
+      }),
+      signal: controller.signal
     });
+
+    clearTimeout(timeout);
 
     const data = await response.json();
 
@@ -61,7 +68,11 @@ app.post('/api/analyze', async (req, res) => {
     res.json({ text });
 
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    if (err.name === 'AbortError') {
+      res.status(504).json({ error: 'Request timeout — спробуй з коротшим сценарієм або меншою кількістю зображень' });
+    } else {
+      res.status(500).json({ error: err.message });
+    }
   }
 });
 
