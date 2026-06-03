@@ -106,8 +106,6 @@
   .selection-count { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--accent); }
   .prompt-item-title { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-family: 'DM Mono', monospace; font-weight: 500; }
-  .badge-kling { background: rgba(96,208,240,0.12); color: var(--accent2); border: 1px solid rgba(96,208,240,0.2); }
-  .badge-heygen { background: rgba(240,176,96,0.12); color: var(--warn); border: 1px solid rgba(240,176,96,0.2); }
   .badge-split { background: rgba(200,240,96,0.12); color: var(--accent); border: 1px solid rgba(200,240,96,0.2); }
   .prompt-text { font-size: 13px; color: #c8c8c4; line-height: 1.7; font-family: 'DM Mono', monospace; white-space: pre-wrap; word-break: break-word; }
 
@@ -132,7 +130,6 @@
 
 <div class="main">
 
-  <!-- Step 1: Style -->
   <div class="step">
     <div class="step-label">01 — Стиль проекту</div>
     <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
@@ -143,14 +140,12 @@
     <input type="text" id="projectStyle" placeholder="або впиши свій стиль..." />
   </div>
 
-  <!-- Step 2: Characters -->
   <div class="step">
     <div class="step-label">02 — Персонажі</div>
     <div class="chars-grid" id="charsGrid"></div>
     <button class="add-char-btn" onclick="addChar()">+ Додати персонажа</button>
   </div>
 
-  <!-- Step 3: Script -->
   <div class="step">
     <div class="step-label">03 — Сценарій</div>
     <textarea id="scriptInput" rows="12" placeholder="[Кадр 1 — спальня, ніч] Чоловік тягнеться до дружини в ліжку...&#10;&#10;[Кадр 2 — кухня, вечір] Вони вечеряють разом..."></textarea>
@@ -166,7 +161,6 @@
   </div>
   <div class="error-box" id="errorBox"></div>
 
-  <!-- Results -->
   <div class="results" id="results">
     <div class="summary-grid" id="summaryGrid"></div>
     <div class="chars-summary" id="charsSummary"></div>
@@ -229,7 +223,6 @@ let charIdCounter = 0;
 const selected = { image: new Set(), video: new Set(), analysis: new Set() };
 
 // ===== СТИСНЕННЯ ЗОБРАЖЕНЬ =====
-// Стискає зображення до максимум 800px і якості 0.7 перед відправкою
 function compressImage(base64, maxSize = 800, quality = 0.7) {
   return new Promise((resolve) => {
     const img = new Image();
@@ -248,16 +241,10 @@ function compressImage(base64, maxSize = 800, quality = 0.7) {
     img.src = base64;
   });
 }
-// ================================
 
 function toggleSelect(type, id, el) {
-  if (selected[type].has(id)) {
-    selected[type].delete(id);
-    el.classList.remove('selected');
-  } else {
-    selected[type].add(id);
-    el.classList.add('selected');
-  }
+  if (selected[type].has(id)) { selected[type].delete(id); el.classList.remove('selected'); }
+  else { selected[type].add(id); el.classList.add('selected'); }
   updateSelBar(type);
 }
 
@@ -278,14 +265,11 @@ function copySelected(type) {
   const ids = [...selected[type]];
   let text = '';
   if (type === 'image') {
-    text = analysisResult.scenes.filter(s => ids.includes(s.number))
-      .map(s => `=== Scene ${s.number}: ${s.location} ===\n${s.image_prompt}`).join('\n\n');
+    text = analysisResult.scenes.filter(s => ids.includes(s.number)).map(s => `=== Scene ${s.number}: ${s.location} ===\n${s.image_prompt}`).join('\n\n');
   } else if (type === 'video') {
-    text = analysisResult.scenes.filter(s => ids.includes(s.number))
-      .map(s => `=== Scene ${s.number}: ${s.location} · ${s.duration_seconds || ''}s ===\n${s.video_prompt}`).join('\n\n');
+    text = analysisResult.scenes.filter(s => ids.includes(s.number)).map(s => `=== Scene ${s.number}: ${s.location} · ${s.duration_seconds || ''}s ===\n${s.video_prompt}`).join('\n\n');
   } else if (type === 'analysis') {
-    text = analysisResult.scenes.filter(s => ids.includes(s.number))
-      .map(s => `=== Scene ${s.number}: ${s.location} · ${s.time} ===\nПерсонажі: ${s.characters_present.join(', ')}\nДія: ${s.action}${s.dialogue ? '\nДіалог: ' + s.dialogue : ''}`).join('\n\n');
+    text = analysisResult.scenes.filter(s => ids.includes(s.number)).map(s => `=== Scene ${s.number}: ${s.location} · ${s.time} ===\nПерсонажі: ${s.characters_present.join(', ')}\nДія: ${s.action}${s.dialogue ? '\nДіалог: ' + s.dialogue : ''}`).join('\n\n');
   }
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.querySelector(`#selBar-${type} .btn-primary`);
@@ -296,9 +280,7 @@ function copySelected(type) {
 
 function setStyle(val) {
   document.getElementById('projectStyle').value = val;
-  document.querySelectorAll('.preset-btn').forEach(b => {
-    b.classList.toggle('active', b.textContent.trim() === val);
-  });
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === val));
 }
 
 function addChar() {
@@ -322,43 +304,22 @@ function renderChars() {
       <button class="char-remove" onclick="removeChar(${c.id})">×</button>
       ${c.imageB64
         ? `<img class="char-photo" src="${c.imageB64}" onclick="triggerUpload(${c.id})" style="cursor:pointer;" title="Натисни щоб замінити" />`
-        : `<div class="char-photo-placeholder"
-              onclick="triggerUpload(${c.id})"
-              ondragover="handleDragOver(event, ${c.id})"
-              ondragleave="handleDragLeave(event, ${c.id})"
-              ondrop="handleDrop(event, ${c.id})"
-              id="placeholder-${c.id}">
-              <span style="font-size:24px">+</span>
-              <span>перетягни або натисни</span>
+        : `<div class="char-photo-placeholder" onclick="triggerUpload(${c.id})" ondragover="handleDragOver(event,${c.id})" ondragleave="handleDragLeave(event,${c.id})" ondrop="handleDrop(event,${c.id})" id="placeholder-${c.id}">
+              <span style="font-size:24px">+</span><span>перетягни або натисни</span>
            </div>`
       }
-      <input class="char-name-input" type="text" placeholder="Роль (напр: чоловік)" value="${c.name}"
-        oninput="updateCharName(${c.id}, this.value)" />
+      <input class="char-name-input" type="text" placeholder="Роль (напр: чоловік)" value="${c.name}" oninput="updateCharName(${c.id}, this.value)" />
       <input type="file" id="file-${c.id}" accept="image/*" onchange="handleImage(${c.id}, this)" style="display:none" />
     `;
     grid.appendChild(div);
   });
 }
 
-function triggerUpload(id) {
-  document.getElementById('file-' + id)?.click();
-}
-
-function handleDragOver(e, id) {
-  e.preventDefault();
-  e.stopPropagation();
-  document.getElementById('placeholder-' + id)?.classList.add('drag-over');
-}
-
-function handleDragLeave(e, id) {
-  e.preventDefault();
-  e.stopPropagation();
-  document.getElementById('placeholder-' + id)?.classList.remove('drag-over');
-}
-
+function triggerUpload(id) { document.getElementById('file-' + id)?.click(); }
+function handleDragOver(e, id) { e.preventDefault(); e.stopPropagation(); document.getElementById('placeholder-' + id)?.classList.add('drag-over'); }
+function handleDragLeave(e, id) { e.preventDefault(); e.stopPropagation(); document.getElementById('placeholder-' + id)?.classList.remove('drag-over'); }
 function handleDrop(e, id) {
-  e.preventDefault();
-  e.stopPropagation();
+  e.preventDefault(); e.stopPropagation();
   document.getElementById('placeholder-' + id)?.classList.remove('drag-over');
   const file = e.dataTransfer.files[0];
   if (!file || !file.type.startsWith('image/')) return;
@@ -375,16 +336,8 @@ async function loadImageFile(id, file) {
   reader.readAsDataURL(file);
 }
 
-function updateCharName(id, val) {
-  const c = chars.find(x => x.id === id);
-  if (c) c.name = val;
-}
-
-function handleImage(id, input) {
-  const file = input.files[0];
-  if (!file) return;
-  loadImageFile(id, file);
-}
+function updateCharName(id, val) { const c = chars.find(x => x.id === id); if (c) c.name = val; }
+function handleImage(id, input) { const file = input.files[0]; if (!file) return; loadImageFile(id, file); }
 
 function setProgress(pct, msg) {
   document.getElementById('progressFill').style.width = pct + '%';
@@ -392,30 +345,16 @@ function setProgress(pct, msg) {
 }
 
 function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', ['image','video','analysis'][i] === name);
-  });
-  document.querySelectorAll('.tab-content').forEach(tc => {
-    tc.classList.toggle('active', tc.id === 'tab-' + name);
-  });
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['image','video','analysis'][i] === name));
+  document.querySelectorAll('.tab-content').forEach(tc => tc.classList.toggle('active', tc.id === 'tab-' + name));
 }
 
 function copyAll(type) {
   if (!analysisResult) return;
   let text = '';
-  if (type === 'image') {
-    text = analysisResult.scenes.map(s =>
-      `=== Scene ${s.number}: ${s.location} ===\n${s.image_prompt}`
-    ).join('\n\n');
-  } else if (type === 'video') {
-    text = analysisResult.scenes.map(s =>
-      `=== Scene ${s.number}: ${s.location} · ${s.duration_seconds ? s.duration_seconds + 's' : ''} ===\n${s.video_prompt}`
-    ).join('\n\n');
-  } else if (type === 'analysis') {
-    text = analysisResult.scenes.map(s =>
-      `=== Scene ${s.number}: ${s.location} · ${s.time} ===\nПерсонажі: ${s.characters_present.join(', ')}\nДія: ${s.action}${s.dialogue ? '\nДіалог: ' + s.dialogue : ''}${s.should_split ? '\n⚠ ' + s.split_reason : ''}`
-    ).join('\n\n');
-  }
+  if (type === 'image') text = analysisResult.scenes.map(s => `=== Scene ${s.number}: ${s.location} ===\n${s.image_prompt}`).join('\n\n');
+  else if (type === 'video') text = analysisResult.scenes.map(s => `=== Scene ${s.number}: ${s.location} · ${s.duration_seconds ? s.duration_seconds + 's' : ''} ===\n${s.video_prompt}`).join('\n\n');
+  else if (type === 'analysis') text = analysisResult.scenes.map(s => `=== Scene ${s.number}: ${s.location} · ${s.time} ===\nПерсонажі: ${s.characters_present.join(', ')}\nДія: ${s.action}${s.dialogue ? '\nДіалог: ' + s.dialogue : ''}${s.should_split ? '\n⚠ ' + s.split_reason : ''}`).join('\n\n');
   const btnId = type === 'image' ? 'copyAllImage' : type === 'video' ? 'copyAllVideo' : 'copyAllAnalysis';
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById(btnId);
@@ -448,20 +387,28 @@ async function analyze() {
   setProgress(10, 'Підготовка запиту...');
 
   const charsWithImages = chars.filter(c => c.name);
-  let charDescSection = charsWithImages.length > 0
-    ? '\n\nCHARACTER REFERENCES:\n' + charsWithImages.map(c => `- Role: "${c.name}" ${c.imageB64 ? '(image attached)' : ''}`).join('\n')
-    : '';
 
-  const systemPrompt = `You are a JSON API. You must respond with ONLY a valid JSON object. No explanations, no apologies, no markdown, no backticks, no text before or after the JSON. Never write "I'm sorry" or any other text — only JSON.
+  // Будуємо детальний опис персонажів для системного промпту
+  const charVisualList = charsWithImages.map(c => `- Role: "${c.name}"${c.imageB64 ? ' (reference image attached — analyze hair color/style, eye color, skin tone, face features, body type, clothing)' : ' (no image)'}`).join('\n');
+  let charDescSection = charsWithImages.length > 0 ? '\n\nCHARACTER REFERENCES:\n' + charVisualList : '';
 
-CRITICAL: You MUST process EVERY scene in the screenplay. If there are 24 scenes, output all 24. Do not stop early. Do not summarize. Every [Кадр N] or [Frame N] must become a separate scene object in the array.
+  const systemPrompt = `You are a JSON API. You must respond with ONLY a valid JSON object. No explanations, no markdown, no backticks, no text before or after the JSON.
+
+CRITICAL: You MUST process EVERY scene in the screenplay. Never skip any scene.
 
 Animation project style: "${style}"${charDescSection}
+
+CRITICAL RULES FOR image_prompt:
+1. NEVER use character role names (like "Girl2", "Friend2", "Man", "Woman", "Hero") in image_prompt
+2. ALWAYS describe characters by their PHYSICAL APPEARANCE ONLY: exact hair color, hair length and style, eye color, skin tone, body type, age appearance, clothing details, accessories
+3. If a reference image is attached, carefully analyze it and use those visual details
+4. Example WRONG: "Girl2 is standing near the window"
+5. Example CORRECT: "A young woman with long blonde straight hair, blue eyes, wearing a green bomber jacket and dark jeans, is standing near the window"
 
 Return this exact JSON structure:
 {
   "characters": [
-    {"role": "role name", "alias": "short English alias", "visual": "detailed visual description from the reference image: hair color/style, face features, approximate age, body type, typical clothing style"}
+    {"role": "role name", "alias": "short English alias", "visual": "detailed visual description: hair color/length/style, eye color, skin tone, age appearance, body type, typical clothing"}
   ],
   "scenes": [
     {
@@ -471,45 +418,33 @@ Return this exact JSON structure:
       "characters_present": ["alias1"],
       "action": "brief action description in Ukrainian",
       "dialogue": "all dialogue lines verbatim from this scene",
-      "is_heygen": false,
       "should_split": false,
       "split_reason": "",
-      "image_prompt": "Follow this exact structure: 1) Shot type (medium shot / close-up / wide shot etc) 2) Location with lighting description (e.g. 'lit by a soft warm floor lamp') 3) Characters wearing specific clothing (e.g. 'comfortable cotton pajamas') 4) Each character's exact body position, gesture, and facial expression 5) Key background details (furniture, objects, atmosphere). Use the character's visual description. Write in English, 3-5 sentences. Style: ${style}.",
-      "video_prompt": "Take the original scene text from the screenplay exactly as written (actions + dialogue verbatim) and add emotional descriptions for each character in parentheses — describing how they feel physically and emotionally (e.g. 'with a tense, guarded posture', 'eyes avoiding contact', 'a quiet longing in his expression'). Keep the original Ukrainian/English text. Do not rewrite, summarize or replace anything.",
-      "duration_seconds": "estimated scene duration in seconds — choose from: 6, 8, 10, 12, 15. Base this on: amount of action, number of dialogue lines, emotional weight. Short silent moment = 6s. Brief dialogue = 8s. Normal scene with 2-3 lines = 10s. Longer dialogue or complex action = 12s. Long scene with many lines = 15s."
+      "image_prompt": "NEVER use role names here. Structure: 1) Shot type 2) Location with lighting 3) Each character described ONLY by physical appearance (hair, eyes, skin, clothing, body position, expression) 4) Background details. English, 3-5 sentences. Style: ${style}.",
+      "video_prompt": "Copy the original scene text exactly and add emotional descriptions in parentheses for each character. Keep original Ukrainian/English text unchanged.",
+      "duration_seconds": 10
     }
   ],
   "total_scenes": 0,
-  "heygen_count": 0,
   "split_count": 0
-}
-
-Rules:
-- PROCESS ALL SCENES — never skip any
-- should_split = true if scene has very distinct location changes
-- Describe characters in image_prompt by visual appearance only, never by role name
-- In video_prompt: copy the original scene text exactly and only ADD emotional descriptions in parentheses — never remove or replace original text
-- Return ONLY the JSON, nothing else`;
+}`;
 
   setProgress(30, 'Надсилаємо до GPT-4o...');
 
   try {
-    const images = charsWithImages
-      .filter(c => c.imageB64)
-      .map(c => ({ role: c.name, data: c.imageB64 }));
+    const images = charsWithImages.filter(c => c.imageB64).map(c => ({ role: c.name, data: c.imageB64 }));
 
     const resp = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         systemPrompt,
-        userText: 'SCREENPLAY:\n' + script + (images.length ? '\n\nCharacter reference images are attached.' : ''),
+        userText: 'SCREENPLAY:\n' + script + (images.length ? '\n\nCharacter reference images are attached. For each character, carefully analyze their appearance from the image and use ONLY visual descriptions (never role names) in all image_prompt fields.' : ''),
         images
       })
     });
 
     setProgress(70, 'Отримуємо відповідь...');
-
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.error || 'Server error');
 
@@ -545,24 +480,17 @@ function renderResults(d) {
 
   document.getElementById('charsSummary').innerHTML = d.characters.map(c => {
     const cd = chars.find(x => x.name.toLowerCase() === c.role.toLowerCase());
-    const imgTag = cd?.imageB64
-      ? `<img src="${cd.imageB64}" />`
-      : `<span style="width:22px;height:22px;border-radius:50%;background:var(--surface2);display:inline-block;vertical-align:middle;"></span>`;
+    const imgTag = cd?.imageB64 ? `<img src="${cd.imageB64}" />` : `<span style="width:22px;height:22px;border-radius:50%;background:var(--surface2);display:inline-block;vertical-align:middle;"></span>`;
     return `<div class="char-pill">${imgTag}<span class="char-pill-name">${c.alias}</span><span style="font-size:12px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.visual}</span></div>`;
   }).join('');
 
   const imgList = document.getElementById('imagePrompts');
   const vidList = document.getElementById('videoPrompts');
   const anList = document.getElementById('analysisItems');
-  imgList.innerHTML = '';
-  vidList.innerHTML = '';
-  anList.innerHTML = '';
+  imgList.innerHTML = ''; vidList.innerHTML = ''; anList.innerHTML = '';
 
   d.scenes.forEach(s => {
-    const badges = [
-      s.should_split ? '<span class="badge badge-split">split</span>' : ''
-    ].join('');
-
+    const badges = s.should_split ? '<span class="badge badge-split">split</span>' : '';
     const title = `scene_${String(s.number).padStart(2,'0')} · ${s.location} · ${s.time}`;
 
     const makeItem = (promptText, promptId, type, sceneNum) => {
@@ -572,7 +500,7 @@ function renderResults(d) {
       div.innerHTML = `
         <div class="prompt-item-header">
           <div class="prompt-item-title"><div class="prompt-checkbox"></div>${title} ${badges}</div>
-          <button class="btn btn-copy" onclick="event.stopPropagation();copyPrompt(this, 'p-${promptId}')">copy</button>
+          <button class="btn btn-copy" onclick="event.stopPropagation();copyPrompt(this,'p-${promptId}')">copy</button>
         </div>
         <div class="prompt-text" id="p-${promptId}">${promptText || ''}</div>
       `;
@@ -587,7 +515,7 @@ function renderResults(d) {
     vidDiv.innerHTML = `
       <div class="prompt-item-header">
         <div class="prompt-item-title"><div class="prompt-checkbox"></div>${title} ${badges} ${s.duration_seconds ? `<span class="badge" style="background:rgba(200,240,96,0.1);color:var(--accent);border:1px solid rgba(200,240,96,0.2);">⏱ ${s.duration_seconds}s</span>` : ''}</div>
-        <button class="btn btn-copy" onclick="event.stopPropagation();copyPrompt(this, 'p-vid-${s.number}')">copy</button>
+        <button class="btn btn-copy" onclick="event.stopPropagation();copyPrompt(this,'p-vid-${s.number}')">copy</button>
       </div>
       <div class="prompt-text" id="p-vid-${s.number}">${s.video_prompt || ''}</div>
     `;
@@ -609,7 +537,6 @@ function renderResults(d) {
   });
 }
 
-// Init
 window.onload = () => { addChar(); addChar(); };
 </script>
 </body>
