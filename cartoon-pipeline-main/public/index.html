@@ -7,46 +7,28 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0e0e0f;
-    --surface: #161618;
-    --surface2: #1e1e21;
-    --border: #2a2a2e;
-    --border2: #3a3a3f;
-    --text: #f0f0ee;
-    --muted: #888884;
-    --accent: #c8f060;
-    --accent2: #60d0f0;
-    --warn: #f0b060;
-    --danger: #f06060;
-    --radius: 8px;
-    --radius-lg: 12px;
+    --bg: #0e0e0f; --surface: #161618; --surface2: #1e1e21;
+    --border: #2a2a2e; --border2: #3a3a3f; --text: #f0f0ee;
+    --muted: #888884; --accent: #c8f060; --accent2: #60d0f0;
+    --warn: #f0b060; --danger: #f06060; --radius: 8px; --radius-lg: 12px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
-
   .header { border-bottom: 1px solid var(--border); padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; }
   .logo { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--accent); letter-spacing: 0.08em; }
   .logo span { color: var(--muted); }
-
   .main { max-width: 900px; margin: 0 auto; padding: 40px 32px; }
-
   .step { margin-bottom: 32px; }
   .step-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
   .step-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-  input[type="text"], textarea {
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 10px 14px;
-    outline: none; transition: border-color 0.2s; width: 100%;
-  }
+  input[type="text"], textarea { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 10px 14px; outline: none; transition: border-color 0.2s; width: 100%; }
   input:focus, textarea:focus { border-color: var(--border2); }
   textarea { resize: vertical; line-height: 1.7; }
-
   .chars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 12px; }
   .char-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px; position: relative; }
   .char-card.has-image { border-color: var(--border2); }
   .char-photo { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius); margin-bottom: 10px; display: block; }
-  .char-photo-placeholder { width: 100%; aspect-ratio: 1; border-radius: var(--radius); margin-bottom: 10px; background: var(--surface2); border: 1px dashed var(--border2); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 28px; color: var(--muted); transition: all 0.2s; flex-direction: column; gap: 6px; }
+  .char-photo-placeholder { width: 100%; aspect-ratio: 1; border-radius: var(--radius); margin-bottom: 10px; background: var(--surface2); border: 1px dashed var(--border2); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--muted); transition: all 0.2s; flex-direction: column; gap: 6px; }
   .char-photo-placeholder:hover { border-color: var(--accent); color: var(--accent); }
   .char-photo-placeholder.drag-over { border-color: var(--accent); color: var(--accent); background: rgba(200,240,96,0.06); transform: scale(1.02); }
   .char-photo-placeholder span { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
@@ -55,7 +37,6 @@
   .char-remove:hover { background: var(--danger); border-color: var(--danger); color: white; }
   .add-char-btn { border: 1px dashed var(--border2); border-radius: var(--radius-lg); padding: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; color: var(--muted); font-size: 13px; background: transparent; transition: all 0.2s; width: 100%; }
   .add-char-btn:hover { border-color: var(--accent); color: var(--accent); }
-
   .btn { padding: 10px 20px; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
   .btn-primary { background: var(--accent); color: #0e0e0f; }
   .btn-primary:hover { opacity: 0.88; }
@@ -65,35 +46,27 @@
   .btn-copy { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-size: 12px; padding: 6px 12px; font-family: 'DM Mono', monospace; }
   .btn-copy:hover { border-color: var(--accent); color: var(--accent); }
   .btn-copy.copied { border-color: var(--accent); color: var(--accent); }
-
   .progress { display: none; margin-top: 20px; }
   .progress.show { display: block; }
   .progress-bar { height: 2px; background: var(--border); border-radius: 1px; overflow: hidden; margin-bottom: 10px; }
   .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease; }
   .progress-msg { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
-
   .results { display: none; margin-top: 40px; }
   .results.show { display: block; }
-
   .tabs { display: flex; gap: 2px; margin-bottom: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; width: fit-content; }
   .tab { padding: 7px 18px; border-radius: 6px; font-size: 13px; cursor: pointer; color: var(--muted); font-family: 'DM Mono', monospace; transition: all 0.2s; border: none; background: transparent; }
   .tab.active { background: var(--surface2); color: var(--text); border: 1px solid var(--border2); }
-
   .tab-content { display: none; }
   .tab-content.active { display: block; }
-
   .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 28px; }
   .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
   .stat-val { font-size: 26px; font-weight: 300; color: var(--accent); font-family: 'DM Mono', monospace; }
   .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
-
   .chars-summary { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
   .char-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 99px; padding: 5px 14px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
   .char-pill img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
   .char-pill-name { color: var(--accent2); font-family: 'DM Mono', monospace; font-size: 12px; }
-
   .copy-all-row { display: flex; justify-content: flex-end; margin-bottom: 14px; }
-
   .prompt-list { display: flex; flex-direction: column; gap: 10px; }
   .prompt-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; cursor: pointer; transition: border-color 0.15s; }
   .prompt-item:hover { border-color: var(--border2); }
@@ -108,73 +81,50 @@
   .badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-family: 'DM Mono', monospace; font-weight: 500; }
   .badge-split { background: rgba(200,240,96,0.12); color: var(--accent); border: 1px solid rgba(200,240,96,0.2); }
   .prompt-text { font-size: 13px; color: #c8c8c4; line-height: 1.7; font-family: 'DM Mono', monospace; white-space: pre-wrap; word-break: break-word; }
-
   .error-box { background: rgba(240,96,96,0.08); border: 1px solid rgba(240,96,96,0.25); border-radius: var(--radius); padding: 14px 16px; color: var(--danger); font-size: 13px; margin-top: 16px; display: none; }
   .error-box.show { display: block; }
-
   .preset-btn { font-size: 13px; padding: 7px 14px; }
   .preset-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,240,96,0.08); }
-
-  @media (max-width: 600px) {
-    .main { padding: 24px 16px; }
-    .summary-grid { grid-template-columns: repeat(2, 1fr); }
-    .header { padding: 16px; }
-  }
+  @media (max-width: 600px) { .main { padding: 24px 16px; } .summary-grid { grid-template-columns: repeat(2, 1fr); } .header { padding: 16px; } }
 </style>
 </head>
 <body>
-
-<div class="header">
-  <div class="logo">cartoon<span>/</span>pipeline</div>
-</div>
-
+<div class="header"><div class="logo">cartoon<span>/</span>pipeline</div></div>
 <div class="main">
-
   <div class="step">
     <div class="step-label">01 — Стиль проекту</div>
-    <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+    <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
       <button class="btn btn-outline preset-btn" onclick="setStyle('3D cartoon')">3D cartoon</button>
       <button class="btn btn-outline preset-btn" onclick="setStyle('2D cartoon')">2D cartoon</button>
       <button class="btn btn-outline preset-btn" onclick="setStyle('realistic style')">realistic style</button>
     </div>
     <input type="text" id="projectStyle" placeholder="або впиши свій стиль..." />
   </div>
-
   <div class="step">
     <div class="step-label">02 — Персонажі</div>
     <div class="chars-grid" id="charsGrid"></div>
     <button class="add-char-btn" onclick="addChar()">+ Додати персонажа</button>
   </div>
-
   <div class="step">
     <div class="step-label">03 — Сценарій</div>
-    <textarea id="scriptInput" rows="12" placeholder="[Кадр 1 — спальня, ніч] Чоловік тягнеться до дружини в ліжку...&#10;&#10;[Кадр 2 — кухня, вечір] Вони вечеряють разом..."></textarea>
+    <textarea id="scriptInput" rows="12" placeholder="[Кадр 1 — спальня, ніч]..."></textarea>
   </div>
-
-  <button class="btn btn-primary" id="analyzeBtn" onclick="analyze()">
-    Аналізувати сценарій
-  </button>
-
+  <button class="btn btn-primary" id="analyzeBtn" onclick="analyze()">Аналізувати сценарій</button>
   <div class="progress" id="progress">
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
     <div class="progress-msg" id="progressMsg">Ініціалізація...</div>
   </div>
   <div class="error-box" id="errorBox"></div>
-
   <div class="results" id="results">
     <div class="summary-grid" id="summaryGrid"></div>
     <div class="chars-summary" id="charsSummary"></div>
-
     <div class="tabs">
       <button class="tab active" onclick="switchTab('image')">image prompts</button>
       <button class="tab" onclick="switchTab('video')">video prompts</button>
       <button class="tab" onclick="switchTab('analysis')">аналіз сцен</button>
     </div>
-
     <div class="tab-content active" id="tab-image">
-      <div class="copy-all-row">
-        <button class="btn btn-copy" id="copyAllImage" onclick="copyAll('image')">copy all image prompts</button>
-      </div>
+      <div class="copy-all-row"><button class="btn btn-copy" id="copyAllImage" onclick="copyAll('image')">copy all image prompts</button></div>
       <div class="prompt-list" id="imagePrompts"></div>
       <div class="selection-bar" id="selBar-image">
         <span class="selection-count" id="selCount-image">0 вибрано</span>
@@ -184,11 +134,8 @@
         </div>
       </div>
     </div>
-
     <div class="tab-content" id="tab-video">
-      <div class="copy-all-row">
-        <button class="btn btn-copy" id="copyAllVideo" onclick="copyAll('video')">copy all video prompts</button>
-      </div>
+      <div class="copy-all-row"><button class="btn btn-copy" id="copyAllVideo" onclick="copyAll('video')">copy all video prompts</button></div>
       <div class="prompt-list" id="videoPrompts"></div>
       <div class="selection-bar" id="selBar-video">
         <span class="selection-count" id="selCount-video">0 вибрано</span>
@@ -198,11 +145,8 @@
         </div>
       </div>
     </div>
-
     <div class="tab-content" id="tab-analysis">
-      <div class="copy-all-row">
-        <button class="btn btn-copy" id="copyAllAnalysis" onclick="copyAll('analysis')">copy all аналіз сцен</button>
-      </div>
+      <div class="copy-all-row"><button class="btn btn-copy" id="copyAllAnalysis" onclick="copyAll('analysis')">copy all аналіз сцен</button></div>
       <div class="prompt-list" id="analysisItems"></div>
       <div class="selection-bar" id="selBar-analysis">
         <span class="selection-count" id="selCount-analysis">0 вибрано</span>
@@ -213,18 +157,13 @@
       </div>
     </div>
   </div>
-
 </div>
-
 <script>
-let chars = [];
-let analysisResult = null;
-let charIdCounter = 0;
+let chars = [], analysisResult = null, charIdCounter = 0;
 const selected = { image: new Set(), video: new Set(), analysis: new Set() };
 
-// ===== СТИСНЕННЯ ЗОБРАЖЕНЬ =====
 function compressImage(base64, maxSize = 800, quality = 0.7) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const img = new Image();
     img.onload = () => {
       let { width, height } = img;
@@ -233,8 +172,7 @@ function compressImage(base64, maxSize = 800, quality = 0.7) {
         else { width = Math.round(width * maxSize / height); height = maxSize; }
       }
       const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
+      canvas.width = width; canvas.height = height;
       canvas.getContext('2d').drawImage(img, 0, 0, width, height);
       resolve(canvas.toDataURL('image/jpeg', quality));
     };
@@ -247,53 +185,35 @@ function toggleSelect(type, id, el) {
   else { selected[type].add(id); el.classList.add('selected'); }
   updateSelBar(type);
 }
-
 function updateSelBar(type) {
   const count = selected[type].size;
   document.getElementById('selBar-' + type).classList.toggle('show', count > 0);
   document.getElementById('selCount-' + type).textContent = count + ' вибрано';
 }
-
 function clearSelection(type) {
   selected[type].clear();
   document.querySelectorAll(`#tab-${type} .prompt-item`).forEach(el => el.classList.remove('selected'));
   updateSelBar(type);
 }
-
 function copySelected(type) {
   if (!analysisResult) return;
   const ids = [...selected[type]];
   let text = '';
-  if (type === 'image') {
-    text = analysisResult.scenes.filter(s => ids.includes(s.number)).map(s => `=== Scene ${s.number}: ${s.location} ===\n${s.image_prompt}`).join('\n\n');
-  } else if (type === 'video') {
-    text = analysisResult.scenes.filter(s => ids.includes(s.number)).map(s => `=== Scene ${s.number}: ${s.location} · ${s.duration_seconds || ''}s ===\n${s.video_prompt}`).join('\n\n');
-  } else if (type === 'analysis') {
-    text = analysisResult.scenes.filter(s => ids.includes(s.number)).map(s => `=== Scene ${s.number}: ${s.location} · ${s.time} ===\nПерсонажі: ${s.characters_present.join(', ')}\nДія: ${s.action}${s.dialogue ? '\nДіалог: ' + s.dialogue : ''}`).join('\n\n');
-  }
+  if (type === 'image') text = analysisResult.scenes.filter(s => ids.includes(s.number)).map(s => `=== Scene ${s.number}: ${s.location} ===\n${s.image_prompt}`).join('\n\n');
+  else if (type === 'video') text = analysisResult.scenes.filter(s => ids.includes(s.number)).map(s => `=== Scene ${s.number}: ${s.location} · ${s.duration_seconds || ''}s ===\n${s.video_prompt}`).join('\n\n');
+  else if (type === 'analysis') text = analysisResult.scenes.filter(s => ids.includes(s.number)).map(s => `=== Scene ${s.number}: ${s.location} · ${s.time} ===\nПерсонажі: ${s.characters_present.join(', ')}\nДія: ${s.action}${s.dialogue ? '\nДіалог: ' + s.dialogue : ''}`).join('\n\n');
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.querySelector(`#selBar-${type} .btn-primary`);
     btn.textContent = 'скопійовано!';
     setTimeout(() => { btn.textContent = 'копіювати вибрані'; clearSelection(type); }, 2000);
   });
 }
-
 function setStyle(val) {
   document.getElementById('projectStyle').value = val;
   document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === val));
 }
-
-function addChar() {
-  const id = ++charIdCounter;
-  chars.push({ id, name: '', imageB64: null });
-  renderChars();
-}
-
-function removeChar(id) {
-  chars = chars.filter(c => c.id !== id);
-  renderChars();
-}
-
+function addChar() { const id = ++charIdCounter; chars.push({ id, name: '', imageB64: null }); renderChars(); }
+function removeChar(id) { chars = chars.filter(c => c.id !== id); renderChars(); }
 function renderChars() {
   const grid = document.getElementById('charsGrid');
   grid.innerHTML = '';
@@ -303,18 +223,15 @@ function renderChars() {
     div.innerHTML = `
       <button class="char-remove" onclick="removeChar(${c.id})">×</button>
       ${c.imageB64
-        ? `<img class="char-photo" src="${c.imageB64}" onclick="triggerUpload(${c.id})" style="cursor:pointer;" title="Натисни щоб замінити" />`
+        ? `<img class="char-photo" src="${c.imageB64}" onclick="triggerUpload(${c.id})" style="cursor:pointer;" />`
         : `<div class="char-photo-placeholder" onclick="triggerUpload(${c.id})" ondragover="handleDragOver(event,${c.id})" ondragleave="handleDragLeave(event,${c.id})" ondrop="handleDrop(event,${c.id})" id="placeholder-${c.id}">
               <span style="font-size:24px">+</span><span>перетягни або натисни</span>
-           </div>`
-      }
+           </div>`}
       <input class="char-name-input" type="text" placeholder="Роль (напр: чоловік)" value="${c.name}" oninput="updateCharName(${c.id}, this.value)" />
-      <input type="file" id="file-${c.id}" accept="image/*" onchange="handleImage(${c.id}, this)" style="display:none" />
-    `;
+      <input type="file" id="file-${c.id}" accept="image/*" onchange="handleImage(${c.id}, this)" style="display:none" />`;
     grid.appendChild(div);
   });
 }
-
 function triggerUpload(id) { document.getElementById('file-' + id)?.click(); }
 function handleDragOver(e, id) { e.preventDefault(); e.stopPropagation(); document.getElementById('placeholder-' + id)?.classList.add('drag-over'); }
 function handleDragLeave(e, id) { e.preventDefault(); e.stopPropagation(); document.getElementById('placeholder-' + id)?.classList.remove('drag-over'); }
@@ -325,7 +242,6 @@ function handleDrop(e, id) {
   if (!file || !file.type.startsWith('image/')) return;
   loadImageFile(id, file);
 }
-
 async function loadImageFile(id, file) {
   const reader = new FileReader();
   reader.onload = async e => {
@@ -335,20 +251,13 @@ async function loadImageFile(id, file) {
   };
   reader.readAsDataURL(file);
 }
-
 function updateCharName(id, val) { const c = chars.find(x => x.id === id); if (c) c.name = val; }
 function handleImage(id, input) { const file = input.files[0]; if (!file) return; loadImageFile(id, file); }
-
-function setProgress(pct, msg) {
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressMsg').textContent = msg;
-}
-
+function setProgress(pct, msg) { document.getElementById('progressFill').style.width = pct + '%'; document.getElementById('progressMsg').textContent = msg; }
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', ['image','video','analysis'][i] === name));
   document.querySelectorAll('.tab-content').forEach(tc => tc.classList.toggle('active', tc.id === 'tab-' + name));
 }
-
 function copyAll(type) {
   if (!analysisResult) return;
   let text = '';
@@ -359,25 +268,22 @@ function copyAll(type) {
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById(btnId);
     const orig = btn.textContent;
-    btn.textContent = 'copied!';
-    btn.classList.add('copied');
+    btn.textContent = 'copied!'; btn.classList.add('copied');
     setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
   });
 }
-
 function copyPrompt(btn, id) {
   const el = document.getElementById(id);
   if (!el) return;
   navigator.clipboard.writeText(el.textContent).then(() => {
-    btn.textContent = 'copied!';
-    btn.classList.add('copied');
+    btn.textContent = 'copied!'; btn.classList.add('copied');
     setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
   });
 }
 
 async function analyze() {
   const script = document.getElementById('scriptInput').value.trim();
-  const style = document.getElementById('projectStyle').value.trim() || 'cinematic photorealistic animation';
+  const style = document.getElementById('projectStyle').value.trim() || 'cinematic animation';
   if (!script) return;
 
   document.getElementById('errorBox').className = 'error-box';
@@ -386,60 +292,34 @@ async function analyze() {
   document.getElementById('analyzeBtn').disabled = true;
   setProgress(10, 'Підготовка запиту...');
 
-  const charsWithImages = chars.filter(c => c.name);
+  const charsWithName = chars.filter(c => c.name);
 
-  // Будуємо детальний опис персонажів для системного промпту
-  const charVisualList = charsWithImages.map(c => `- Role: "${c.name}"${c.imageB64 ? ' (reference image attached — analyze hair color/style, eye color, skin tone, face features, body type, clothing)' : ' (no image)'}`).join('\n');
-  let charDescSection = charsWithImages.length > 0 ? '\n\nCHARACTER REFERENCES:\n' + charVisualList : '';
+  // Будуємо список персонажів з їх візуальними описами для системного промпту
+  // БЕЗ зображень в тексті — зображення йдуть окремо
+  const charList = charsWithName.length > 0
+    ? '\n\nCHARACTERS:\n' + charsWithName.map(c => `- "${c.name}"${c.imageB64 ? ' [has reference image]' : ''}`).join('\n')
+    : '';
 
-  const systemPrompt = `You are a JSON API. You must respond with ONLY a valid JSON object. No explanations, no markdown, no backticks, no text before or after the JSON.
+  const systemPrompt = `You are a JSON API. Return ONLY valid JSON, no markdown, no extra text.
+Process EVERY scene in the screenplay.
+Style: "${style}"${charList}
 
-CRITICAL: You MUST process EVERY scene in the screenplay. Never skip any scene.
+RULE FOR image_prompt: NEVER write character role names (e.g. "Girl2", "Man", "Hero"). Instead describe ONLY physical appearance: hair color/length/style, eye color, skin tone, clothing, body position, expression. Use reference images if provided.
 
-Animation project style: "${style}"${charDescSection}
-
-CRITICAL RULES FOR image_prompt:
-1. NEVER use character role names (like "Girl2", "Friend2", "Man", "Woman", "Hero") in image_prompt
-2. ALWAYS describe characters by their PHYSICAL APPEARANCE ONLY: exact hair color, hair length and style, eye color, skin tone, body type, age appearance, clothing details, accessories
-3. If a reference image is attached, carefully analyze it and use those visual details
-4. Example WRONG: "Girl2 is standing near the window"
-5. Example CORRECT: "A young woman with long blonde straight hair, blue eyes, wearing a green bomber jacket and dark jeans, is standing near the window"
-
-Return this exact JSON structure:
-{
-  "characters": [
-    {"role": "role name", "alias": "short English alias", "visual": "detailed visual description: hair color/length/style, eye color, skin tone, age appearance, body type, typical clothing"}
-  ],
-  "scenes": [
-    {
-      "number": 1,
-      "location": "location in Ukrainian",
-      "time": "time of day in Ukrainian",
-      "characters_present": ["alias1"],
-      "action": "brief action description in Ukrainian",
-      "dialogue": "all dialogue lines verbatim from this scene",
-      "should_split": false,
-      "split_reason": "",
-      "image_prompt": "NEVER use role names here. Structure: 1) Shot type 2) Location with lighting 3) Each character described ONLY by physical appearance (hair, eyes, skin, clothing, body position, expression) 4) Background details. English, 3-5 sentences. Style: ${style}.",
-      "video_prompt": "Copy the original scene text exactly and add emotional descriptions in parentheses for each character. Keep original Ukrainian/English text unchanged.",
-      "duration_seconds": 10
-    }
-  ],
-  "total_scenes": 0,
-  "split_count": 0
-}`;
+JSON structure:
+{"characters":[{"role":"","alias":"","visual":"hair, eyes, skin, clothing description"}],"scenes":[{"number":1,"location":"","time":"","characters_present":["alias"],"action":"","dialogue":"","should_split":false,"split_reason":"","image_prompt":"physical appearance description only, no role names. Shot type, location, lighting, characters by appearance, background. English, 2-4 sentences. Style: ${style}.","video_prompt":"original scene text + emotional descriptions in parentheses","duration_seconds":10}],"total_scenes":0,"split_count":0}`;
 
   setProgress(30, 'Надсилаємо до GPT-4o...');
 
   try {
-    const images = charsWithImages.filter(c => c.imageB64).map(c => ({ role: c.name, data: c.imageB64 }));
+    const images = charsWithName.filter(c => c.imageB64).map(c => ({ role: c.name, data: c.imageB64 }));
 
     const resp = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         systemPrompt,
-        userText: 'SCREENPLAY:\n' + script + (images.length ? '\n\nCharacter reference images are attached. For each character, carefully analyze their appearance from the image and use ONLY visual descriptions (never role names) in all image_prompt fields.' : ''),
+        userText: 'SCREENPLAY:\n' + script + (images.length ? '\n\nAnalyze attached character images and use their physical appearance in image_prompt fields.' : ''),
         images
       })
     });
@@ -448,9 +328,7 @@ Return this exact JSON structure:
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.error || 'Server error');
 
-    const raw = data.text || '';
-    const clean = raw.replace(/```json|```/g, '').trim();
-
+    const clean = (data.text || '').replace(/```json|```/g, '').trim();
     setProgress(90, 'Парсимо результат...');
     analysisResult = JSON.parse(clean);
     renderResults(analysisResult);
@@ -460,14 +338,12 @@ Return this exact JSON structure:
       document.getElementById('progress').className = 'progress';
       document.getElementById('results').className = 'results show';
     }, 400);
-
   } catch (e) {
     document.getElementById('progress').className = 'progress';
     const eb = document.getElementById('errorBox');
     eb.className = 'error-box show';
     eb.textContent = 'Помилка: ' + e.message;
   }
-
   document.getElementById('analyzeBtn').disabled = false;
 }
 
@@ -480,7 +356,7 @@ function renderResults(d) {
 
   document.getElementById('charsSummary').innerHTML = d.characters.map(c => {
     const cd = chars.find(x => x.name.toLowerCase() === c.role.toLowerCase());
-    const imgTag = cd?.imageB64 ? `<img src="${cd.imageB64}" />` : `<span style="width:22px;height:22px;border-radius:50%;background:var(--surface2);display:inline-block;vertical-align:middle;"></span>`;
+    const imgTag = cd?.imageB64 ? `<img src="${cd.imageB64}" />` : `<span style="width:22px;height:22px;border-radius:50%;background:var(--surface2);display:inline-block;"></span>`;
     return `<div class="char-pill">${imgTag}<span class="char-pill-name">${c.alias}</span><span style="font-size:12px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.visual}</span></div>`;
   }).join('');
 
@@ -496,14 +372,13 @@ function renderResults(d) {
     const makeItem = (promptText, promptId, type, sceneNum) => {
       const div = document.createElement('div');
       div.className = 'prompt-item';
-      div.onclick = (e) => { if (!e.target.closest('button')) toggleSelect(type, sceneNum, div); };
+      div.onclick = e => { if (!e.target.closest('button')) toggleSelect(type, sceneNum, div); };
       div.innerHTML = `
         <div class="prompt-item-header">
           <div class="prompt-item-title"><div class="prompt-checkbox"></div>${title} ${badges}</div>
           <button class="btn btn-copy" onclick="event.stopPropagation();copyPrompt(this,'p-${promptId}')">copy</button>
         </div>
-        <div class="prompt-text" id="p-${promptId}">${promptText || ''}</div>
-      `;
+        <div class="prompt-text" id="p-${promptId}">${promptText || ''}</div>`;
       return div;
     };
 
@@ -511,19 +386,18 @@ function renderResults(d) {
 
     const vidDiv = document.createElement('div');
     vidDiv.className = 'prompt-item';
-    vidDiv.onclick = (e) => { if (!e.target.closest('button')) toggleSelect('video', s.number, vidDiv); };
+    vidDiv.onclick = e => { if (!e.target.closest('button')) toggleSelect('video', s.number, vidDiv); };
     vidDiv.innerHTML = `
       <div class="prompt-item-header">
         <div class="prompt-item-title"><div class="prompt-checkbox"></div>${title} ${badges} ${s.duration_seconds ? `<span class="badge" style="background:rgba(200,240,96,0.1);color:var(--accent);border:1px solid rgba(200,240,96,0.2);">⏱ ${s.duration_seconds}s</span>` : ''}</div>
         <button class="btn btn-copy" onclick="event.stopPropagation();copyPrompt(this,'p-vid-${s.number}')">copy</button>
       </div>
-      <div class="prompt-text" id="p-vid-${s.number}">${s.video_prompt || ''}</div>
-    `;
+      <div class="prompt-text" id="p-vid-${s.number}">${s.video_prompt || ''}</div>`;
     vidList.appendChild(vidDiv);
 
     const anDiv = document.createElement('div');
     anDiv.className = 'prompt-item';
-    anDiv.onclick = (e) => { if (!e.target.closest('button')) toggleSelect('analysis', s.number, anDiv); };
+    anDiv.onclick = e => { if (!e.target.closest('button')) toggleSelect('analysis', s.number, anDiv); };
     anDiv.innerHTML = `
       <div class="prompt-item-header">
         <div class="prompt-item-title"><div class="prompt-checkbox"></div>${title} ${badges}</div>
@@ -531,8 +405,7 @@ function renderResults(d) {
       <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">Персонажі: ${s.characters_present.join(', ')}</div>
       <div style="font-size:13px;color:var(--text);margin-bottom:6px;">${s.action}</div>
       ${s.dialogue ? `<div style="font-size:13px;color:var(--accent2);font-style:italic;white-space:pre-wrap;">${s.dialogue}</div>` : ''}
-      ${s.should_split ? `<div style="font-size:12px;color:var(--accent);margin-top:8px;">⚠ ${s.split_reason}</div>` : ''}
-    `;
+      ${s.should_split ? `<div style="font-size:12px;color:var(--accent);margin-top:8px;">⚠ ${s.split_reason}</div>` : ''}`;
     anList.appendChild(anDiv);
   });
 }
